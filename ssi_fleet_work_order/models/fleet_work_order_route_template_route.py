@@ -7,7 +7,7 @@ from odoo import api, fields, models
 class FleetWorkOrderRouteTemplateRoute(models.Model):
     _name = "fleet_work_order_route_template.route"
     _description = "Fleet Work Order Route Template - Route"
-    _order = "sequence, id"
+    _order = "template_id, sequence, id"
 
     template_id = fields.Many2one(
         comodel_name="fleet_work_order_route_template",
