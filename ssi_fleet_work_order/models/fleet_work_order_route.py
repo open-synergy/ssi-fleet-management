@@ -10,7 +10,7 @@ from odoo import models, fields
 class FleetWorkOrderRoute(models.Model):
     _name = "fleet_work_order.route"
     _description = "Fleet Work Order Route"
-    _order = "order_id, sequence, id"
+    _order = "work_order_id, sequence, id"
 
     work_order_id = fields.Many2one(
         comodel_name="fleet_work_order",
