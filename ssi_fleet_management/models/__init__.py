@@ -5,5 +5,5 @@
 from . import (
     res_company,
     res_config_settings,
-    fleet_vehicle_type,
+    fleet_vehicle,
 )
