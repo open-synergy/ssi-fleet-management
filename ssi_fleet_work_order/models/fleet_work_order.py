@@ -70,6 +70,13 @@ class FleetWorkOrder(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    date = fields.Date(
+        string="Date",
+        required=True,
+        readonly=True,
+        default=fields.Date.context_today,
+        states={"draft": [("readonly", False)]},
+    )
     partner_id = fields.Many2one(
         comodel_name="res.partner",
         string="Partner",
@@ -209,6 +216,29 @@ class FleetWorkOrder(models.Model):
     @api.onchange("type_id")
     def onchange_route_template_id(self):
         self.route_template_id = False
+
+    def _prepare_route_data(self, route):
+        self.ensure_one()
+        result = {
+            "work_order_id": self.id,
+            "sequence": route.sequence,
+            "start_location_id": route.start_location_id.id,
+            "end_location_id": route.end_location_id.id,
+            "distance": route.distance,
+        }
+        return result
+
+    @api.onchange("route_template_id")
+    def onchange_route_ids(self):
+        self.route_ids = [(5, 0, 0)]
+        if self.route_template_id:
+            template = self.route_template_id
+            if template.route_ids:
+                routes = []
+                for route in template.route_ids:
+                    res = self._prepare_route_data(route)
+                    routes.append((0, 0, res))
+                self.route_ids = routes
 
     @api.depends("route_ids", "route_ids.distance")
     def _compute_total_distance(self):

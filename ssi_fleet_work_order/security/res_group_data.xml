@@ -4,15 +4,6 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
     <!-- Configurator -->
-    <record id="fleet_vehicle_group" model="res.groups">
-        <field name="name">Fleet Vehicle</field>
-        <field name="category_id" ref="fleet_work_order_configurator_module_category" />
-        <field
-            name="users"
-            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
-        />
-    </record>
-
     <record id="fleet_work_order_route_template_group" model="res.groups">
         <field name="name">Fleet Work Order Route Template</field>
         <field name="category_id" ref="fleet_work_order_configurator_module_category" />
