@@ -13,7 +13,7 @@
             <div
                     class="app_settings_block"
                     data-string="Fleet Management"
-                    string="Loan"
+                    string="Fleet"
                     data-key="ssi_fleet_management"
                 >
                 <h2>Feature</h2>
@@ -45,7 +45,7 @@
 <menuitem
         id="res_config_settings_menu"
         name="Settings"
-        parent="menu_vehicle_root_configuration"
+        parent="menu_fleet_management_configuration"
         sequence="0"
         action="res_config_settings_action"
         groups="base.group_system"

@@ -48,27 +48,51 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                 <xpath expr="//page[1]" position="before">
                     <page name="driver" string="Drivers">
                         <group name="driver_1" colspan="4" col="2">
-                            <field name="driver_selection_method" />
+                            <field
+                                name="driver_selection_method"
+                                string="Method"
+                                widget="radio"
+                            />
                             <field
                                 name="driver_ids"
                                 attrs="{'invisible': [('driver_selection_method', '=', 'domain')]}"
                             />
                             <field
                                 name="driver_domain"
+                                string="Domain"
+                                widget="domain"
+                                options="{'model': 'res.partner', 'in_dialog': true}"
                                 attrs="{'invisible': [('driver_selection_method', '=', 'manual')]}"
+                            />
+                            <field
+                                name="allowed_driver_ids"
+                                widget="many2many_tags"
+                                invisible="1"
                             />
                         </group>
                     </page>
                     <page name="codriver" string="Co-Driver">
                         <group name="codriver_1" colspan="4" col="2">
-                            <field name="codriver_selection_method" />
+                            <field
+                                name="codriver_selection_method"
+                                string="Method"
+                                widget="radio"
+                            />
                             <field
                                 name="codriver_ids"
                                 attrs="{'invisible': [('codriver_selection_method', '=', 'domain')]}"
                             />
                             <field
                                 name="codriver_domain"
+                                string="Domain"
+                                widget="domain"
+                                options="{'model': 'res.partner', 'in_dialog': true}"
                                 attrs="{'invisible': [('codriver_selection_method', '=', 'manual')]}"
+                            />
+                            <field
+                                name="allowed_codriver_ids"
+                                widget="many2many_tags"
+                                invisible="1"
                             />
                         </group>
                     </page>
@@ -76,19 +100,4 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
             </data>
         </field>
     </record>
-
-    <record id="fleet_vehicle_action" model="ir.actions.act_window">
-        <field name="name">Vehicles</field>
-        <field name="res_model">fleet_vehicle</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem
-        id="fleet_vehicle_menu"
-        name="Vehicles"
-        action="fleet_vehicle_action"
-        parent="ssi_fleet_management.menu_fleet_management_configuration"
-        groups="fleet_vehicle_group"
-        sequence="100"
-    />
 </odoo>

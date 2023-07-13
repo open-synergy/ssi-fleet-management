@@ -21,6 +21,7 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                     <field name="type_id" />
                     <field name="driver_id" widget="many2one_avatar" />
                     <field name="codriver_id" widget="many2one_avatar" />
+                    <field name="date" optional="hide" />
                     <field name="estimated_date_depart" optional="hide" />
                     <field name="estimated_date_arrive" optional="hide" />
                     <field name="real_date_depart" />
@@ -69,6 +70,11 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                         name="grp_codriver_id"
                         string="Co-Driver"
                         context="{'group_by':'codriver_id'}"
+                    />
+                    <filter
+                        name="grp_date"
+                        string="Date"
+                        context="{'group_by':'date'}"
                     />
                     <filter
                         name="grp_estimated_date_depart"
@@ -149,6 +155,7 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                     />
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">
+                    <field name="date" />
                     <field name="estimated_date_depart" />
                     <field name="estimated_date_arrive" />
                     <field name="real_date_depart" />

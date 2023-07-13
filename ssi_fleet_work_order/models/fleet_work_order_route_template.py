@@ -11,14 +11,14 @@ class FleetWorkOrderRouteTemplate(models.Model):
     _inherit = ["mixin.master_data"]
 
     route_ids = fields.One2many(
+        string="Routes",
         comodel_name="fleet_work_order_route_template.route",
         inverse_name="template_id",
-        string="Routes",
     )
     location_selection_method = fields.Selection(
-        selection=[("manual", "Manual"), ("domain", "Domain")],
         string="Location Selection Method",
-        required=True,
+        selection=[("manual", "Manual"), ("domain", "Domain")],
+        default="manual",
     )
     location_ids = fields.Many2many(
         comodel_name="res.partner",
@@ -27,12 +27,16 @@ class FleetWorkOrderRouteTemplate(models.Model):
         column2="location_id",
         string="Locations",
     )
-    location_domain = fields.Text(string="Location Domain", default=[])
+    location_domain = fields.Text(
+        string="Location Domain",
+        default=[],
+    )
     allowed_location_ids = fields.Many2many(
+        string="Allowed Locations",
         comodel_name="res.partner",
         compute="_compute_allowed_location_ids",
         store=False,
-        string="Allowed Locations",
+        compute_sudo=True,
     )
 
     @api.depends("location_selection_method", "location_ids", "location_domain")

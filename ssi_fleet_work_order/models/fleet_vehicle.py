@@ -9,8 +9,9 @@ class FleetVehicle(models.Model):
     _inherit = "fleet_vehicle"
 
     driver_selection_method = fields.Selection(
-        selection=[("manual", "Manual"), ("domain", "Domain")],
         string="Driver Selection Method",
+        selection=[("manual", "Manual"), ("domain", "Domain")],
+        default="manual",
     )
     driver_ids = fields.Many2many(
         comodel_name="res.partner",
@@ -21,11 +22,16 @@ class FleetVehicle(models.Model):
     )
     driver_domain = fields.Text(default=[])
     allowed_driver_ids = fields.Many2many(
-        compute="_compute_allowed_driver_ids", store=False, string="Allowed Drivers"
+        string="Allowed Drivers",
+        comodel_name="res.partner",
+        compute="_compute_allowed_driver_ids",
+        store=False,
+        compute_sudo=True,
     )
     codriver_selection_method = fields.Selection(
-        selection=[("manual", "Manual"), ("domain", "Domain")],
         string="Co-Driver Selection Method",
+        selection=[("manual", "Manual"), ("domain", "Domain")],
+        default="manual",
     )
     codriver_ids = fields.Many2many(
         comodel_name="res.partner",
@@ -36,12 +42,18 @@ class FleetVehicle(models.Model):
     )
     codriver_domain = fields.Text(default=[])
     allowed_codriver_ids = fields.Many2many(
+        string="Allowed Co-Drivers",
+        comodel_name="res.partner",
         compute="_compute_allowed_codriver_ids",
         store=False,
-        string="Allowed Co-Drivers",
+        compute_sudo=True,
     )
 
-    @api.depends("driver_selection_method", "driver_ids", "driver_domain")
+    @api.depends(
+        "driver_selection_method",
+        "driver_ids",
+        "driver_domain",
+    )
     def _compute_allowed_driver_ids(self):
         for record in self:
             result = []
@@ -52,7 +64,11 @@ class FleetVehicle(models.Model):
                 result = self.env["res.partner"].search(criteria).ids
             record.allowed_driver_ids = result
 
-    @api.depends("codriver_selection_method", "codriver_ids", "codriver_domain")
+    @api.depends(
+        "codriver_selection_method",
+        "codriver_ids",
+        "codriver_domain",
+    )
     def _compute_allowed_codriver_ids(self):
         for record in self:
             result = []

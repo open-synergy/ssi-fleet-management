@@ -11,8 +11,9 @@ class FleetWorkOrderType(models.Model):
     _inherit = ["mixin.master_data"]
 
     vehicle_selection_method = fields.Selection(
-        selection=[("manual", "Manual"), ("domain", "Domain")],
         string="Vehicle Selection Method",
+        selection=[("manual", "Manual"), ("domain", "Domain")],
+        default="manual",
     )
     vehicle_ids = fields.Many2many(
         comodel_name="fleet_vehicle",
@@ -21,16 +22,21 @@ class FleetWorkOrderType(models.Model):
         column2="vehicle_id",
         string="Vehicles",
     )
-    vehicle_domain = fields.Text(string="Vehicle Domain", default=[])
+    vehicle_domain = fields.Text(
+        string="Vehicle Domain",
+        default=[],
+    )
     allowed_vehicle_ids = fields.Many2many(
+        string="Allowed Vehicles",
         comodel_name="fleet_vehicle",
         compute="_compute_allowed_vehicle_ids",
         store=False,
-        string="Allowed Vehicles",
+        compute_sudo=True,
     )
     route_template_selection_method = fields.Selection(
-        selection=[("manual", "Manual"), ("domain", "Domain")],
         string="Route Template Selection Method",
+        selection=[("manual", "Manual"), ("domain", "Domain")],
+        default="manual",
     )
     route_template_ids = fields.Many2many(
         comodel_name="fleet_work_order_route_template",
@@ -39,15 +45,23 @@ class FleetWorkOrderType(models.Model):
         column2="route_template_id",
         string="Route Templates",
     )
-    route_template_domain = fields.Text(string="Route Template Domain", default=[])
+    route_template_domain = fields.Text(
+        string="Route Template Domain",
+        default=[],
+    )
     allowed_route_template_ids = fields.Many2many(
+        string="Allowed Route Templates",
         comodel_name="fleet_work_order_route_template",
         compute="_compute_allowed_route_template_ids",
         store=False,
-        string="Allowed Route Templates",
+        compute_sudo=True,
     )
 
-    @api.depends("vehicle_selection_method", "vehicle_ids", "vehicle_domain")
+    @api.depends(
+        "vehicle_selection_method",
+        "vehicle_ids",
+        "vehicle_domain",
+    )
     def _compute_allowed_vehicle_ids(self):
         for record in self:
             result = []
@@ -59,7 +73,9 @@ class FleetWorkOrderType(models.Model):
             record.allowed_vehicle_ids = result
 
     @api.depends(
-        "route_template_selection_method", "route_template_ids", "route_template_domain"
+        "route_template_selection_method",
+        "route_template_ids",
+        "route_template_domain",
     )
     def _compute_allowed_route_template_ids(self):
         for record in self:
