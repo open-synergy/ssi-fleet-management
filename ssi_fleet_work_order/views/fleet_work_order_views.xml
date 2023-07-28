@@ -156,12 +156,15 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">
                     <field name="date" />
-                    <field name="estimated_date_depart" />
-                    <field name="estimated_date_arrive" />
-                    <field name="real_date_depart" />
-                    <field name="real_date_arrive" />
-                    <field name="start_odometer" />
-                    <field name="end_odometer" />
+                    <separator string="Estimated Time" colspan="2" />
+                    <field name="estimated_date_depart" string="Depart" />
+                    <field name="estimated_date_arrive" string="Arrive" />
+                    <separator string="Real Time" colspan="2" />
+                    <field name="real_date_depart" string="Depart" />
+                    <field name="real_date_arrive" string="Arrive" />
+                    <separator string="Odometer" colspan="2" />
+                    <field name="start_odometer" string="Start" />
+                    <field name="end_odometer" string="End" />
                 </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="route" string="Routes">
@@ -173,8 +176,14 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                             <field name="route_ids">
                                 <tree editable="top">
                                     <field name="sequence" widget="handle" />
-                                    <field name="start_location_id" />
-                                    <field name="end_location_id" />
+                                    <field
+                                        name="start_location_id"
+                                        domain="[('id','in',parent.allowed_location_ids)]"
+                                    />
+                                    <field
+                                        name="end_location_id"
+                                        domain="[('id','in',parent.allowed_location_ids)]"
+                                    />
                                     <field name="distance" />
                                 </tree>
                             </field>

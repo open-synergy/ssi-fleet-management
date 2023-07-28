@@ -44,6 +44,8 @@ class FleetWorkOrder(models.Model):
         "action_confirm",
         "action_approve_approval",
         "action_reject_approval",
+        "action_open",
+        "action_done",
         "%(ssi_transaction_cancel_mixin.base_select_cancel_reason_action)d",
         "action_restart",
     ]
@@ -145,6 +147,7 @@ class FleetWorkOrder(models.Model):
         comodel_name="fleet_work_order_route_template",
         string="Route Template",
         readonly=True,
+        required=True,
         states={"draft": [("readonly", False)]},
     )
     allowed_route_template_ids = fields.Many2many(

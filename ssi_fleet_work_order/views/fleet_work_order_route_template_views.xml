@@ -48,8 +48,14 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                         <field name="route_ids">
                             <tree editable="top">
                                 <field name="sequence" widget="handle" />
-                                <field name="start_location_id" />
-                                <field name="end_location_id" />
+                                <field
+                                    name="start_location_id"
+                                    domain="[('id','in',parent.allowed_location_ids)]"
+                                />
+                                <field
+                                    name="end_location_id"
+                                    domain="[('id','in',parent.allowed_location_ids)]"
+                                />
                                 <field name="distance" />
                             </tree>
                         </field>
