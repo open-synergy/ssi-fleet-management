@@ -19,13 +19,13 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                     <page name="picking" string="Pickings">
                         <group name="picking_1" colspan="4" col="2">
                             <field
-                                name="picking_type_id"
-                                domain="[('id', 'in', allowed_picking_type_ids)]"
-                            />
-                            <field
                                 name="allowed_picking_type_ids"
                                 widget="many2many_tags"
                                 invisible="1"
+                            />
+                            <field
+                                name="picking_type_id"
+                                domain="[('id', 'in', allowed_picking_type_ids)]"
                             />
                         </group>
                     </page>

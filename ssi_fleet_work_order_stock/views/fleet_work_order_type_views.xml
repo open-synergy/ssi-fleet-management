@@ -31,6 +31,7 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                                 name="picking_type_domain"
                                 string="Domain"
                                 widget="domain"
+                                options="{'model': 'stock.picking.type', 'in_dialog': true}"
                                 attrs="{'invisible': [('picking_type_selection_method', '=', 'manual')]}"
                             />
                             <field
