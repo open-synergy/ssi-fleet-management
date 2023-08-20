@@ -23,11 +23,11 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                                 widget="many2many_tags"
                                 invisible="1"
                             />
-                            <field
-                                name="picking_type_id"
-                                domain="[('id', 'in', allowed_picking_type_ids)]"
-                            />
                         </group>
+                        <field
+                            name="picking_ids"
+                            domain="[('picking_type_id', 'in', allowed_picking_type_ids),('state','=','assigned')]"
+                        />
                     </page>
                 </xpath>
             </data>
