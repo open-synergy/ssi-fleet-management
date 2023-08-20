@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-ssi_fleet_management',
         'odoo14-addon-ssi_fleet_work_order',
+        'odoo14-addon-ssi_fleet_work_order_stock',
     ],
     classifiers=[
         'Programming Language :: Python',
