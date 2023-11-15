@@ -26,7 +26,8 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                         </group>
                         <field
                             name="picking_ids"
-                            domain="[('picking_type_id', 'in', allowed_picking_type_ids),('state','=','assigned')]"
+                            domain="[('picking_type_id', 'in', allowed_picking_type_ids),('state','=','assigned'),('fleet_work_order_id','=',False)]"
+                            widget="many2many"
                         />
                     </page>
                 </xpath>
