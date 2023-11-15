@@ -2,7 +2,10 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+from odoo.addons.ssi_decorator import ssi_decorator
 
 
 class FleetWorkOrder(models.Model):
@@ -132,17 +135,31 @@ class FleetWorkOrder(models.Model):
     estimated_date_depart = fields.Datetime(
         string="Estimated Departure Date",
         readonly=True,
+        required=True,
         states={"draft": [("readonly", False)]},
     )
     estimated_date_arrive = fields.Datetime(
         string="Estimated Arrival Date",
         readonly=True,
+        required=True,
         states={"draft": [("readonly", False)]},
     )
-    real_date_depart = fields.Datetime(string="Real Departure Date", readonly=True)
-    real_date_arrive = fields.Datetime(string="Real Arrival Date", readonly=True)
-    start_odometer = fields.Float(string="Start Odometer", readonly=True)
-    end_odometer = fields.Float(string="End Odometer", readonly=True)
+    real_date_depart = fields.Datetime(
+        string="Real Departure Date",
+        readonly=True,
+        states={"ready": [("readonly", False)]},
+    )
+    real_date_arrive = fields.Datetime(
+        string="Real Arrival Date",
+        readonly=True,
+        states={"open": [("readonly", False)]},
+    )
+    start_odometer = fields.Float(
+        string="Start Odometer", readonly=True, states={"ready": [("readonly", False)]}
+    )
+    end_odometer = fields.Float(
+        string="End Odometer", readonly=True, states={"open": [("readonly", False)]}
+    )
     route_template_id = fields.Many2one(
         comodel_name="fleet_work_order_route_template",
         string="Route Template",
@@ -171,19 +188,6 @@ class FleetWorkOrder(models.Model):
     )
     total_distance = fields.Float(
         string="Total Distance", compute="_compute_total_distance", store=True
-    )
-    state = fields.Selection(
-        selection=[
-            ("draft", "Draft"),
-            ("confirm", "Waiting for Approval"),
-            ("ready", "Ready to Start"),
-            ("open", "In Progress"),
-            ("done", "Done"),
-            ("cancel", "Cancelled"),
-            ("reject", "Reject"),
-        ],
-        string="State",
-        default="draft",
     )
 
     @api.model
@@ -249,3 +253,65 @@ class FleetWorkOrder(models.Model):
             record.total_distance = 0.0
             for route in self.route_ids:
                 record.total_distance += route.distance
+
+    @ssi_decorator.pre_open_check()
+    def _30_check_real_depart_time(self):
+        self.ensure_one()
+        if not self.real_date_depart:
+            error_message = """
+                Context: Confirm fleet work order
+                Database ID: %s
+                Problem: Real date depart is empty
+                Solution: Fill real date depart
+                """ % (
+                self.id
+            )
+            raise UserError(_(error_message))
+
+    @ssi_decorator.pre_open_check()
+    def _30_check_starting_odometer(self):
+        self.ensure_one()
+        if not self.start_odometer:
+            error_message = """
+                Context: Confirm fleet work order
+                Database ID: %s
+                Problem: Start odometer is empty
+                Solution: Fill start odometer
+                """ % (
+                self.id
+            )
+            raise UserError(_(error_message))
+
+    @ssi_decorator.pre_done_check()
+    def _30_check_real_arrive_time(self):
+        self.ensure_one()
+        if not self.real_date_arrive:
+            error_message = """
+                Context: Finish fleet work order
+                Database ID: %s
+                Problem: Real date arrive is empty
+                Solution: Fill real date arrive
+                """ % (
+                self.id
+            )
+            raise UserError(_(error_message))
+
+    @ssi_decorator.pre_done_check()
+    def _30_check_ending_odometer(self):
+        self.ensure_one()
+        if not self.end_odometer:
+            error_message = """
+                Context: Finish fleet work order
+                Database ID: %s
+                Problem: End odometer is empty
+                Solution: Fill end odometer
+                """ % (
+                self.id
+            )
+            raise UserError(_(error_message))
+
+    @ssi_decorator.insert_on_form_view()
+    def _insert_form_element(self, view_arch):
+        if self._automatically_insert_view_element:
+            view_arch = self._reconfigure_statusbar_visible(view_arch)
+        return view_arch
