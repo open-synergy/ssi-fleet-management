@@ -12,11 +12,11 @@ class FleetWorkOrder(models.Model):
     _name = "fleet_work_order"
     _description = "Fleet Work Order"
     _inherit = [
-        "mixin.transaction_confirm",
-        "mixin.transaction_ready",
-        "mixin.transaction_open",
-        "mixin.transaction_done",
         "mixin.transaction_cancel",
+        "mixin.transaction_done",
+        "mixin.transaction_open",
+        "mixin.transaction_ready",
+        "mixin.transaction_confirm",
         "mixin.partner",
     ]
 

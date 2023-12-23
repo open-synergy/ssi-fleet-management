@@ -15,13 +15,13 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <data>
-                <xpath expr="//field[@name='user_id']" position="after">
+                <xpath expr="//field[@name='company_id']" position="after">
                     <field name="vehicle_id" />
                     <field name="partner_id" widget="many2one_avatar" />
                     <field name="type_id" />
                     <field name="driver_id" widget="many2one_avatar" />
                     <field name="codriver_id" widget="many2one_avatar" />
-                    <field name="date" optional="hide" />
+                    <field name="date" />
                     <field name="estimated_date_depart" optional="hide" />
                     <field name="estimated_date_arrive" optional="hide" />
                     <field name="real_date_depart" />
@@ -112,22 +112,8 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//field[@name='user_id']" position="after">
-                    <field name="partner_id" widget="many2one_avatar" />
                     <field name="type_id" />
-                    <field
-                        name="vehicle_id"
-                        domain="[('id', 'in', allowed_vehicle_ids)]"
-                    />
-                    <field
-                        name="driver_id"
-                        widget="many2one_avatar"
-                        domain="[('id', 'in', allowed_driver_ids)]"
-                    />
-                    <field
-                        name="codriver_id"
-                        widget="many2one_avatar"
-                        domain="[('id', 'in', allowed_codriver_ids)]"
-                    />
+                    <field name="date" />
                     <field
                         name="allowed_location_ids"
                         widget="many2many_tags"
@@ -155,16 +141,39 @@ License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
                     />
                 </xpath>
                 <xpath expr="//group[@name='header_right']" position="inside">
-                    <field name="date" />
-                    <separator string="Estimated Time" colspan="2" />
-                    <field name="estimated_date_depart" string="Depart" />
-                    <field name="estimated_date_arrive" string="Arrive" />
-                    <separator string="Real Time" colspan="2" />
-                    <field name="real_date_depart" string="Depart" />
-                    <field name="real_date_arrive" string="Arrive" />
-                    <separator string="Odometer" colspan="2" />
-                    <field name="start_odometer" string="Start" />
-                    <field name="end_odometer" string="End" />
+                    <field name="partner_id" widget="many2one_avatar" />
+                    <field
+                        name="vehicle_id"
+                        domain="[('id', 'in', allowed_vehicle_ids)]"
+                    />
+                    <field
+                        name="driver_id"
+                        widget="many2one_avatar"
+                        domain="[('id', 'in', allowed_driver_ids)]"
+                    />
+                    <field
+                        name="codriver_id"
+                        widget="many2one_avatar"
+                        domain="[('id', 'in', allowed_codriver_ids)]"
+                    />
+                    <label for="estimated_date_depart" string="Estimated Time" />
+                    <div class="o_row">
+                        <field name="estimated_date_depart" />
+                         -
+                        <field name="estimated_date_arrive" />
+                    </div>
+                    <label for="real_date_depart" string="Real Time" />
+                    <div class="o_row">
+                        <field name="real_date_depart" />
+                         -
+                        <field name="real_date_arrive" />
+                    </div>
+                    <label for="start_odometer" string="Odoometer" />
+                    <div class="o_row">
+                        <field name="start_odometer" />
+                         -
+                        <field name="end_odometer" />
+                    </div>
                 </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="route" string="Routes">
