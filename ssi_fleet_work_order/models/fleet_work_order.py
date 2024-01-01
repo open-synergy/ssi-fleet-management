@@ -122,7 +122,7 @@ class FleetWorkOrder(models.Model):
     codriver_id = fields.Many2one(
         comodel_name="res.partner",
         string="Co-Driver",
-        required=True,
+        required=False,
         ondelete="restrict",
         readonly=True,
         states={"draft": [("readonly", False)]},
