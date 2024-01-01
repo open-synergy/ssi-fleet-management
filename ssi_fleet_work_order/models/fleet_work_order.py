@@ -1,6 +1,6 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -122,7 +122,7 @@ class FleetWorkOrder(models.Model):
     codriver_id = fields.Many2one(
         comodel_name="res.partner",
         string="Co-Driver",
-        required=True,
+        required=False,
         ondelete="restrict",
         readonly=True,
         states={"draft": [("readonly", False)]},
