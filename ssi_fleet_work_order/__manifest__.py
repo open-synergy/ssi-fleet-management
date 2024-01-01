@@ -1,13 +1,13 @@
 # Copyright 2023 OpenSynergy Indonesia
 # Copyright 2023 PT. Simetri Sinergi Indonesia
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "Fleet Work Order",
     "version": "14.0.2.3.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "installable": True,
     "depends": [
         "ssi_fleet_management",
