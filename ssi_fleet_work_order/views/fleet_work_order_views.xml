@@ -19,6 +19,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
                     <field name="vehicle_id" />
                     <field name="partner_id" widget="many2one_avatar" />
                     <field name="type_id" />
+                    <field name="route_template_id" />
                     <field name="driver_id" widget="many2one_avatar" />
                     <field name="codriver_id" widget="many2one_avatar" />
                     <field name="date" />
