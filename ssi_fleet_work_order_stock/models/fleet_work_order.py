@@ -84,3 +84,8 @@ class FleetWorkOrder(models.Model):
                     'uom_quantity': qty,
                     'uom_id': product_id.uom_id.id,
                 })
+
+    @ssi_decorator.post_confirm_action()
+    def _recompute_computation(self):
+        self.ensure_one()
+        self.action_populate_manifest()
