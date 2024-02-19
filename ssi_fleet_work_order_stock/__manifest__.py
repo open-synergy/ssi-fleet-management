@@ -14,6 +14,7 @@
         "ssi_stock"
     ],
     "data": [
+        "security/ir.model.access.csv",
         "views/fleet_work_order_type_views.xml",
         "views/fleet_work_order_views.xml",
     ],
