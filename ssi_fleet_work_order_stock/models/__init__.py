@@ -5,5 +5,6 @@
 from . import (
     fleet_work_order,
     fleet_work_order_type,
+    fleet_work_order_manifest,
     stock_picking,
 )

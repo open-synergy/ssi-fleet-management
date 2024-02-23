@@ -35,6 +35,11 @@ class FleetWorkOrder(models.Model):
         comodel_name="stock.move.line",
         compute="_compute_move_ids",
     )
+    manifest_ids = fields.One2many(
+        comodel_name="fleet_work_order_manifest",
+        inverse_name="work_order_id",
+        string="Manifest",
+        required=False)
 
     @api.depends(
         "picking_ids",
@@ -62,3 +67,25 @@ class FleetWorkOrder(models.Model):
                 picking.name,
             )
             raise UserError(_(error_message))
+
+    def action_populate_manifest(self):
+        for rec in self:
+            rec.manifest_ids.unlink()
+            product_qty_dict = {}
+            for picking_id in rec.picking_ids:
+                for move_id in picking_id.move_ids_without_package:
+                    product_qty_dict[move_id.product_id] = (product_qty_dict.get(move_id.product_id, 0)
+                                                            + move_id.product_uom._compute_quantity(
+                            move_id.product_uom_qty, move_id.product_id.uom_id))
+            for product_id, qty in product_qty_dict.items():
+                self.env['fleet_work_order_manifest'].create({
+                    'work_order_id': rec.id,
+                    'product_id': product_id.id,
+                    'uom_quantity': qty,
+                    'uom_id': product_id.uom_id.id,
+                })
+
+    @ssi_decorator.post_confirm_action()
+    def _recompute_computation(self):
+        self.ensure_one()
+        self.action_populate_manifest()
