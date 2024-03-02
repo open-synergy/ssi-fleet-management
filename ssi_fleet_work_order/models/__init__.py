@@ -7,6 +7,7 @@ from . import (
     fleet_work_order,
     fleet_work_order_route,
     fleet_work_order_route_template,
+    fleet_work_order_route_template_category,
     fleet_work_order_route_template_route,
     fleet_work_order_type,
 )

@@ -20,6 +20,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
                     <field name="partner_id" widget="many2one_avatar" />
                     <field name="type_id" />
                     <field name="route_template_id" />
+                    <field name="route_template_category_id" optional="hide" />
                     <field name="driver_id" widget="many2one_avatar" />
                     <field name="codriver_id" widget="many2one_avatar" />
                     <field name="date" />
@@ -183,6 +184,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
                                 name="route_template_id"
                                 domain="[('id', 'in', allowed_route_template_ids)]"
                             />
+                            <field name="route_template_category_id" />
                             <field name="route_ids">
                                 <tree editable="top">
                                     <field name="sequence" widget="handle" />

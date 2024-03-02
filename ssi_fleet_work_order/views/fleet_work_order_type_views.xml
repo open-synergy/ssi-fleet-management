@@ -111,6 +111,6 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         action="fleet_work_order_type_action"
         parent="ssi_fleet_management.menu_fleet_management_configuration"
         groups="fleet_work_order_type_group"
-        sequence="120"
+        sequence="130"
     />
 </odoo>

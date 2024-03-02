@@ -167,6 +167,13 @@ class FleetWorkOrder(models.Model):
         required=True,
         states={"draft": [("readonly", False)]},
     )
+    route_template_category_id = fields.Many2one(
+        comodel_name="fleet_work_order_route_template_category",
+        string="Route Template Category",
+        readonly=True,
+        related="route_template_id.category_id",
+        store=True,
+    )
     allowed_route_template_ids = fields.Many2many(
         comodel_name="fleet_work_order_route_template",
         related="type_id.allowed_route_template_ids",
