@@ -2,7 +2,7 @@
 # Copyright 2024 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class FleetWorkOrderManifest(models.Model):
@@ -16,15 +16,7 @@ class FleetWorkOrderManifest(models.Model):
         ondelete="cascade",
     )
     product_id = fields.Many2one(
-        comodel_name="product.product",
-        string="Product",
-        required=True
+        comodel_name="product.product", string="Product", required=True
     )
-    uom_quantity = fields.Float(
-        string="Quantity",
-        required=False)
-    uom_id = fields.Many2one(
-        comodel_name="uom.uom",
-        string="UoM",
-        required=True
-    )
+    uom_quantity = fields.Float(string="Quantity", required=False)
+    uom_id = fields.Many2one(comodel_name="uom.uom", string="UoM", required=True)

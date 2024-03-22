@@ -9,10 +9,7 @@
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
     "license": "AGPL-3",
     "installable": True,
-    "depends": [
-        "ssi_fleet_work_order",
-        "ssi_stock"
-    ],
+    "depends": ["ssi_fleet_work_order", "ssi_stock"],
     "data": [
         "security/ir.model.access.csv",
         "views/fleet_work_order_type_views.xml",
