@@ -30,6 +30,7 @@
         "data/approval_template_data.xml",
         "views/fleet_vehicle_views.xml",
         "views/fleet_work_order_route_template_views.xml",
+        "views/fleet_work_order_route_template_category_views.xml",
         "views/fleet_work_order_type_views.xml",
         "views/fleet_work_order_views.xml",
     ],

@@ -38,6 +38,11 @@ class FleetWorkOrderRouteTemplate(models.Model):
         store=False,
         compute_sudo=True,
     )
+    category_id = fields.Many2one(
+        comodel_name="fleet_work_order_route_template_category",
+        string="Category",
+        required=False,
+    )
 
     @api.depends("location_selection_method", "location_ids", "location_domain")
     def _compute_allowed_location_ids(self):

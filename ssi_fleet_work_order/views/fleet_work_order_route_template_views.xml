@@ -14,7 +14,11 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="category_id" />
+                </xpath>
+            </data>
         </field>
     </record>
 
@@ -27,7 +31,11 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="category_id" />
+                </xpath>
+            </data>
         </field>
     </record>
 
@@ -42,7 +50,9 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <data>
-                <xpath expr="//field[@name='active']" position="after" />
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="category_id" />
+                </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="route" string="Routes">
                         <field name="route_ids">
@@ -102,6 +112,6 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         action="fleet_work_order_route_template_action"
         parent="ssi_fleet_management.menu_fleet_management_configuration"
         groups="fleet_work_order_route_template_group"
-        sequence="110"
+        sequence="120"
     />
 </odoo>

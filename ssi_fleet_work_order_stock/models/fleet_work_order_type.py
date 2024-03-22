@@ -45,7 +45,5 @@ class FleetWorkOrderType(models.Model):
                 result = record.picking_type_ids.ids
             elif record.picking_type_selection_method == "domain":
                 criteria = safe_eval(record.picking_type_domain, {})
-                result = (
-                    self.env["stock.picking.type"].search(criteria).ids
-                )
+                result = self.env["stock.picking.type"].search(criteria).ids
             record.allowed_picking_type_ids = result
