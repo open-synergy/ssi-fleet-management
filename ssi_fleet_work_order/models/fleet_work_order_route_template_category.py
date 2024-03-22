@@ -2,8 +2,7 @@
 # Copyright 2024 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
-from odoo.tools.safe_eval import safe_eval
+from odoo import models
 
 
 class FleetWorkOrderRouteTemplateCategory(models.Model):

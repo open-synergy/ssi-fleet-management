@@ -5,7 +5,10 @@ Copyright 2024 PT. Simetri Sinergi Indonesia
 License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-    <record id="fleet_work_order_route_template_category_view_search" model="ir.ui.view">
+    <record
+        id="fleet_work_order_route_template_category_view_search"
+        model="ir.ui.view"
+    >
         <field name="name">fleet_work_order_route_template_category - Search</field>
         <field name="model">fleet_work_order_route_template_category</field>
         <field
@@ -45,7 +48,10 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         </field>
     </record>
 
-    <record id="fleet_work_order_route_template_category_action" model="ir.actions.act_window">
+    <record
+        id="fleet_work_order_route_template_category_action"
+        model="ir.actions.act_window"
+    >
         <field name="name">Route Template Categories</field>
         <field name="res_model">fleet_work_order_route_template_category</field>
         <field name="view_mode">tree,form</field>

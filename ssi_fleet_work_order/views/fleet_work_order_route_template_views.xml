@@ -16,7 +16,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="category_id"/>
+                    <field name="category_id" />
                 </xpath>
             </data>
         </field>
@@ -33,7 +33,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="category_id"/>
+                    <field name="category_id" />
                 </xpath>
             </data>
         </field>
@@ -51,7 +51,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//field[@name='active']" position="after">
-                    <field name="category_id"/>
+                    <field name="category_id" />
                 </xpath>
                 <xpath expr="//page[1]" position="before">
                     <page name="route" string="Routes">

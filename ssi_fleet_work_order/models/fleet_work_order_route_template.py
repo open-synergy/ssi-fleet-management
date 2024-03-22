@@ -41,7 +41,7 @@ class FleetWorkOrderRouteTemplate(models.Model):
     category_id = fields.Many2one(
         comodel_name="fleet_work_order_route_template_category",
         string="Category",
-        required=False
+        required=False,
     )
 
     @api.depends("location_selection_method", "location_ids", "location_domain")
