@@ -80,44 +80,14 @@
                         context="{'group_by':'state'}"
                     />
                     <filter
-                        name="group_eta_year"
-                        string="ETA by Year"
-                        context="{'group_by':'date_start:year'}"
+                        name="group_etd"
+                        string="ETD"
+                        context="{'group_by':'date_end'}"
                     />
                     <filter
-                        name="group_eta_month"
-                        string="ETA by Month"
-                        context="{'group_by':'date_start:month'}"
-                    />
-                    <filter
-                        name="group_eta_week"
-                        string="ETA by Week"
-                        context="{'group_by':'date_start:week'}"
-                    />
-                    <filter
-                        name="group_eta_day"
-                        string="ETA by Day"
-                        context="{'group_by':'date_start:day'}"
-                    />
-                    <filter
-                        name="group_etd_year"
-                        string="ETD by Year"
-                        context="{'group_by':'date_end:year'}"
-                    />
-                    <filter
-                        name="group_etd_month"
-                        string="ETD by Month"
-                        context="{'group_by':'date_end:month'}"
-                    />
-                    <filter
-                        name="group_etd_week"
-                        string="ETD by Week"
-                        context="{'group_by':'date_end:week'}"
-                    />
-                    <filter
-                        name="group_etd_day"
-                        string="ETD by Day"
-                        context="{'group_by':'date_end:day'}"
+                        name="group_eta"
+                        string="ETA"
+                        context="{'group_by':'date_start'}"
                     />
                 </group>
             </search>
