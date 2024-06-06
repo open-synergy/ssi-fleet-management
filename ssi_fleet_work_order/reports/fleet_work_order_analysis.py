@@ -18,13 +18,13 @@ class FleetWorkOrderAnalysis(models.Model):
     )
     vehicle_id = fields.Many2one(
         string="Vehicle",
-        comodel_name="fleet.vehicle",
+        comodel_name="fleet_vehicle",
     )
     driver_id = fields.Many2one(
         string="Driver",
         comodel_name="res.partner",
     )
-    co_driver_id = fields.Many2one(
+    codriver_id = fields.Many2one(
         string="Co-Driver",
         comodel_name="res.partner",
     )
@@ -73,9 +73,9 @@ class FleetWorkOrderAnalysis(models.Model):
                  w.type_id AS type_id,
                  w.vehicle_id AS vehicle_id,
                  w.driver_id AS driver_id,
-                 w.co_driver_id AS co_driver_id,
-                 w.date_start AS date_start,
-                 w.date_end AS date_end,
+                 w.codriver_id AS codriver_id,
+                 w.estimated_date_depart AS date_start,
+                 w.estimated_date_arrive AS date_end,
                  w.real_date_depart AS real_date_depart,
                  w.real_date_arrive AS real_date_arrive,
                  w.state AS state,
@@ -105,9 +105,9 @@ class FleetWorkOrderAnalysis(models.Model):
                 w.type_id,
                 w.vehicle_id,
                 w.driver_id,
-                w.co_driver_id,
-                w.date_start,
-                w.date_end,
+                w.codriver_id,
+                w.estimated_date_depart,
+                w.estimated_date_arrive,
                 w.real_date_depart,
                 w.real_date_arrive,
                 w.state

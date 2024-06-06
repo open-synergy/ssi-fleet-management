@@ -14,6 +14,7 @@
                 disable_linking="True"
                 sample="1"
             >
+                <field name="vehicle_id" type="row" />
                 <field name="odometer" type="measure" />
             </pivot>
         </field>
@@ -29,6 +30,7 @@
                 sample="1"
                 disable_linking="1"
             >
+                <field name="vehicle_id" type="row" />
                 <field name="odometer" type="measure" />
             </graph>
          </field>
@@ -42,7 +44,7 @@
                 <field name="type_id" />
                 <field name="vehicle_id" />
                 <field name="driver_id" />
-                <field name="co_driver_id" />
+                <field name="codriver_id" />
                 <field name="date_start" />
                 <field name="date_end" />
                 <field name="real_date_depart" />
@@ -52,140 +54,71 @@
                 <separator />
                 <filter name="filter_empty" string="Empty" domain="[('id','=',0)]" />
                 <group expand="1" string="Group By">
-                    <group name="row_group" string="Row Grouping">
-                        <filter
-                                    name="row_group_type"
-                                    string="Type"
-                                    context="{'group_by':'type_id'}"
-                                />
-                        <filter
-                                    name="row_group_vehicle"
-                                    string="Vehicle"
-                                    context="{'group_by':'vehicle_id'}"
-                                />
-                        <filter
-                                    name="row_group_driver"
-                                    string="Driver"
-                                    context="{'group_by':'driver_id'}"
-                                />
-                        <filter
-                                    name="row_group_codriver"
-                                    string="Co-Driver"
-                                    context="{'group_by':'co_driver_id'}"
-                                />
-                        <filter
-                                    name="row_group_state"
-                                    string="State"
-                                    context="{'group_by':'state'}"
-                                />
-                        <filter
-                                    name="row_group_eta_year"
-                                    string="ETA by Year"
-                                    context="{'group_by':'date_start:year'}"
-                                />
-                        <filter
-                                    name="row_group_eta_month"
-                                    string="ETA by Month"
-                                    context="{'group_by':'date_start:month'}"
-                                />
-                        <filter
-                                    name="row_group_eta_week"
-                                    string="ETA by Week"
-                                    context="{'group_by':'date_start:week'}"
-                                />
-                        <filter
-                                    name="row_group_eta_day"
-                                    string="ETA by Day"
-                                    context="{'group_by':'date_start:day'}"
-                                />
-                        <filter
-                                    name="row_group_etd_year"
-                                    string="ETD by Year"
-                                    context="{'group_by':'date_end:year'}"
-                                />
-                        <filter
-                                    name="row_group_etd_month"
-                                    string="ETD by Month"
-                                    context="{'group_by':'date_end:month'}"
-                                />
-                        <filter
-                                    name="row_group_etd_week"
-                                    string="ETD by Week"
-                                    context="{'group_by':'date_end:week'}"
-                                />
-                        <filter
-                                    name="row_group_etd_day"
-                                    string="ETD by Day"
-                                    context="{'group_by':'date_end:day'}"
-                                />
-                    </group>
-                    <group name="col_group" string="Col Grouping">
-                        <filter
-                                    name="col_group_type"
-                                    string="Type"
-                                    context="{'col_group_by':'type_id'}"
-                                />
-                        <filter
-                                    name="col_group_vehicle"
-                                    string="Vehicle"
-                                    context="{'col_group_by':'vehicle_id'}"
-                                />
-                        <filter
-                                    name="col_group_driver"
-                                    string="Driver"
-                                    context="{'col_group_by':'driver_id'}"
-                                />
-                        <filter
-                                    name="col_group_codriver"
-                                    string="Co-Driver"
-                                    context="{'col_group_by':'co_driver_id'}"
-                                />
-                        <filter
-                                    name="col_group_state"
-                                    string="State"
-                                    context="{'col_group_by':'state'}"
-                                />
-                        <filter
-                                    name="col_group_eta_year"
-                                    string="ETA by Year"
-                                    context="{'col_group_by':'date_start:year'}"
-                                />
-                        <filter
-                                    name="col_group_eta_month"
-                                    string="ETA by Month"
-                                    context="{'col_group_by':'date_start:month'}"
-                                />
-                        <filter
-                                    name="col_group_eta_week"
-                                    string="ETA by Week"
-                                    context="{'col_group_by':'date_start:week'}"
-                                />
-                        <filter
-                                    name="col_group_eta_day"
-                                    string="ETA by Day"
-                                    context="{'col_group_by':'date_start:day'}"
-                                />
-                        <filter
-                                    name="col_group_etd_year"
-                                    string="ETD by Year"
-                                    context="{'col_group_by':'date_end:year'}"
-                                />
-                        <filter
-                                    name="col_group_etd_month"
-                                    string="ETD by Month"
-                                    context="{'col_group_by':'date_end:month'}"
-                                />
-                        <filter
-                                    name="col_group_etd_week"
-                                    string="ETD by Week"
-                                    context="{'col_group_by':'date_end:week'}"
-                                />
-                        <filter
-                                    name="col_group_etd_day"
-                                    string="ETD by Day"
-                                    context="{'col_group_by':'date_end:day'}"
-                                />
-                    </group>
+                    <filter
+                        name="group_type"
+                        string="Type"
+                        context="{'group_by':'type_id'}"
+                    />
+                    <filter
+                        name="group_vehicle"
+                        string="Vehicle"
+                        context="{'group_by':'vehicle_id'}"
+                    />
+                    <filter
+                        name="group_driver"
+                        string="Driver"
+                        context="{'group_by':'driver_id'}"
+                    />
+                    <filter
+                        name="group_codriver"
+                        string="Co-Driver"
+                        context="{'group_by':'codriver_id'}"
+                    />
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by':'state'}"
+                    />
+                    <filter
+                        name="group_eta_year"
+                        string="ETA by Year"
+                        context="{'group_by':'date_start:year'}"
+                    />
+                    <filter
+                        name="group_eta_month"
+                        string="ETA by Month"
+                        context="{'group_by':'date_start:month'}"
+                    />
+                    <filter
+                        name="group_eta_week"
+                        string="ETA by Week"
+                        context="{'group_by':'date_start:week'}"
+                    />
+                    <filter
+                        name="group_eta_day"
+                        string="ETA by Day"
+                        context="{'group_by':'date_start:day'}"
+                    />
+                    <filter
+                        name="group_etd_year"
+                        string="ETD by Year"
+                        context="{'group_by':'date_end:year'}"
+                    />
+                    <filter
+                        name="group_etd_month"
+                        string="ETD by Month"
+                        context="{'group_by':'date_end:month'}"
+                    />
+                    <filter
+                        name="group_etd_week"
+                        string="ETD by Week"
+                        context="{'group_by':'date_end:week'}"
+                    />
+                    <filter
+                        name="group_etd_day"
+                        string="ETD by Day"
+                        context="{'group_by':'date_end:day'}"
+                    />
                 </group>
             </search>
         </field>
@@ -201,7 +134,7 @@
 
     <menuitem
         id="menu_fleet_work_order_analysis"
-        parent="ssi_timesheet.reporting_menu"
+        parent="ssi_fleet_management.menu_fleet_management_report"
         action="action_fleet_work_order_analysis"
         sequence="10"
         groups="fleet_work_order_analysis_group"
