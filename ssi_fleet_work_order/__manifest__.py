@@ -33,6 +33,7 @@
         "views/fleet_work_order_route_template_category_views.xml",
         "views/fleet_work_order_type_views.xml",
         "views/fleet_work_order_views.xml",
+        "reports/fleet_work_order_analysis.xml",
     ],
     "images": [],
 }
