@@ -1,0 +1,163 @@
+scenarios:
+  - name: "Fleet Work Order Type - Create"
+    steps:
+      - step: "Create fleet work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Test Work Order Type"
+          code: "TWOT001"
+
+      - step: "Assert type created"
+        action: "assert"
+        target: "wo_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test Work Order Type"
+          code:
+            type: "value"
+            expected: "TWOT001"
+          vehicle_selection_method:
+            type: "value"
+            expected: "manual"
+          route_template_selection_method:
+            type: "value"
+            expected: "manual"
+
+  - name: "Fleet Work Order Type - Edit Name"
+    steps:
+      - step: "Create fleet work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Original Type Name"
+          code: "TWOT002"
+
+      - step: "Update type name"
+        action: "write"
+        target: "wo_type"
+        values:
+          name: "Updated Type Name"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "wo_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "Updated Type Name"
+
+  - name: "Fleet Work Order Type - Delete"
+    steps:
+      - step: "Create fleet work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Type To Delete"
+          code: "TWOT003"
+
+      - step: "Delete type"
+        action: "call"
+        target: "wo_type"
+        method: "unlink"
+
+      - step: "Verify type deleted"
+        action: "search"
+        model: "fleet_work_order_type"
+        domain: [["code", "=", "TWOT003"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Fleet Work Order Type - Allowed Vehicles (manual method)"
+    steps:
+      - step: "Create vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Test Vehicle Type"
+          code: "B 1111 TYPE"
+
+      - step: "Create fleet work order type with vehicle"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Type With Vehicle"
+          code: "TWOT004"
+          vehicle_selection_method: "manual"
+          vehicle_ids:
+            - "EVAL: registry['vehicle'].id"
+
+      - step: "Assert allowed_vehicle_ids computed"
+        action: "assert"
+        target: "wo_type"
+        asserts:
+          allowed_vehicle_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 1
+
+  - name: "Fleet Work Order Route Template Category - Create"
+    steps:
+      - step: "Create route template category"
+        action: "create"
+        model: "fleet_work_order_route_template_category"
+        save_as: "category"
+        values:
+          name: "Test Route Category"
+          code: "TRTCAT001"
+
+      - step: "Assert category created"
+        action: "assert"
+        target: "category"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test Route Category"
+
+  - name: "Fleet Work Order Route Template Category - Edit and Delete"
+    steps:
+      - step: "Create route template category"
+        action: "create"
+        model: "fleet_work_order_route_template_category"
+        save_as: "category"
+        values:
+          name: "Category To Edit"
+          code: "TRTCAT002"
+
+      - step: "Edit category name"
+        action: "write"
+        target: "category"
+        values:
+          name: "Category Edited"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "category"
+        asserts:
+          name:
+            type: "value"
+            expected: "Category Edited"
+
+      - step: "Delete category"
+        action: "call"
+        target: "category"
+        method: "unlink"
+
+      - step: "Verify category deleted"
+        action: "search"
+        model: "fleet_work_order_route_template_category"
+        domain: [["code", "=", "TRTCAT002"]]
+        save_as: "result"
+        expect_count: 0

@@ -54,9 +54,14 @@
     </record>
 
     <record id="fleet_work_order_analysis_company_rule" model="ir.rule">
-        <field name="name">Fleet Work Order Analysis - Responsible to company data</field>
+        <field
+            name="name"
+        >Fleet Work Order Analysis - Responsible to company data</field>
         <field name="model_id" ref="model_fleet_work_order_analysis" />
-        <field name="groups" eval="[(4, ref('fleet_work_order_analysis_company_group'))]" />
+        <field
+            name="groups"
+            eval="[(4, ref('fleet_work_order_analysis_company_group'))]"
+        />
         <field name="domain_force">[('company_id','=',user.company_id.id)]</field>
         <field name="perm_unlink" eval="1" />
         <field name="perm_write" eval="1" />

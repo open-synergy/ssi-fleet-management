@@ -1,0 +1,322 @@
+scenarios:
+  - name: "Fleet Work Order - Full Workflow: draft to done"
+    steps:
+      - step: "Setup - create start location partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_start"
+        values:
+          name: "WO Start Location"
+
+      - step: "Setup - create end location partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_end"
+        values:
+          name: "WO End Location"
+
+      - step: "Setup - create driver partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "driver"
+        values:
+          name: "WO Test Driver"
+
+      - step: "Setup - create route template category"
+        action: "create"
+        model: "fleet_work_order_route_template_category"
+        save_as: "route_category"
+        values:
+          name: "WO Route Category"
+          code: "WORCAT001"
+
+      - step: "Setup - create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "route_template"
+        values:
+          name: "WO Route Template"
+          code: "WORT001"
+          category_id: "EVAL: registry['route_category'].id"
+
+      - step: "Setup - create fleet vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "WO Test Vehicle"
+          code: "B 8888 WO1"
+
+      - step: "Setup - create work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "WO Test Type"
+          code: "WOTYPE001"
+
+      - step: "Create fleet work order"
+        action: "create"
+        model: "fleet_work_order"
+        save_as: "work_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['wo_type'].id"
+          date: 2024-01-15
+          vehicle_id: "EVAL: registry['vehicle'].id"
+          driver_id: "EVAL: registry['driver'].id"
+          estimated_date_depart: "2024-01-15 08:00:00"
+          estimated_date_arrive: "2024-01-15 17:00:00"
+          route_template_id: "EVAL: registry['route_template'].id"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['loc_start'].id"
+                end_location_id: "EVAL: registry['loc_end'].id"
+                distance: 50.0
+
+      - step: "Assert work order created in draft"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+          total_distance:
+            type: "value"
+            expected: 50.0
+
+      - step: "Confirm work order"
+        action: "call"
+        target: "work_order"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Invalidate cache after confirm"
+        action: "call"
+        target: "work_order"
+        method: "invalidate_cache"
+
+      - step: "Approve work order"
+        action: "call"
+        target: "work_order"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "ready"
+
+      - step: "Invalidate cache after ready"
+        action: "call"
+        target: "work_order"
+        method: "invalidate_cache"
+
+      - step: "Set real departure time and start odometer"
+        action: "write"
+        target: "work_order"
+        values:
+          real_date_depart: "2024-01-15 08:30:00"
+          start_odometer: 10000.0
+
+      - step: "Open work order"
+        action: "call"
+        target: "work_order"
+        method: "action_open"
+        as_user: "base.user_admin"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Invalidate cache after open"
+        action: "call"
+        target: "work_order"
+        method: "invalidate_cache"
+
+      - step: "Set real arrival time and end odometer"
+        action: "write"
+        target: "work_order"
+        values:
+          real_date_arrive: "2024-01-15 17:30:00"
+          end_odometer: 10050.0
+
+      - step: "Done work order"
+        action: "call"
+        target: "work_order"
+        method: "action_done"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
+
+  - name: "Fleet Work Order - Total Distance Compute"
+    steps:
+      - step: "Setup - create start location"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_start"
+        values:
+          name: "Dist Start Location"
+
+      - step: "Setup - create mid location"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_mid"
+        values:
+          name: "Dist Mid Location"
+
+      - step: "Setup - create end location"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_end"
+        values:
+          name: "Dist End Location"
+
+      - step: "Setup - create driver"
+        action: "create"
+        model: "res.partner"
+        save_as: "driver"
+        values:
+          name: "Dist Driver"
+
+      - step: "Setup - create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "route_template"
+        values:
+          name: "Distance Route Template"
+          code: "DISTR001"
+
+      - step: "Setup - create vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Distance Test Vehicle"
+          code: "B 7777 DIS"
+
+      - step: "Setup - create work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Distance WO Type"
+          code: "DISTYPE001"
+
+      - step: "Create work order with two routes"
+        action: "create"
+        model: "fleet_work_order"
+        save_as: "work_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['wo_type'].id"
+          date: 2024-02-01
+          vehicle_id: "EVAL: registry['vehicle'].id"
+          driver_id: "EVAL: registry['driver'].id"
+          estimated_date_depart: "2024-02-01 08:00:00"
+          estimated_date_arrive: "2024-02-01 18:00:00"
+          route_template_id: "EVAL: registry['route_template'].id"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['loc_start'].id"
+                end_location_id: "EVAL: registry['loc_mid'].id"
+                distance: 30.0
+            - - 0
+              - 0
+              - sequence: 20
+                start_location_id: "EVAL: registry['loc_mid'].id"
+                end_location_id: "EVAL: registry['loc_end'].id"
+                distance: 45.0
+
+      - step: "Assert total distance is sum of routes"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          total_distance:
+            type: "value"
+            expected: 75.0
+
+  - name: "Fleet Work Order - Cancel from Draft"
+    steps:
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Cancel Test Partner"
+
+      - step: "Setup - create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "route_template"
+        values:
+          name: "Cancel Route Template"
+          code: "CANRT001"
+
+      - step: "Setup - create vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Cancel Test Vehicle"
+          code: "B 6666 CAN"
+
+      - step: "Setup - create work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Cancel WO Type"
+          code: "CANTYPE001"
+
+      - step: "Create fleet work order"
+        action: "create"
+        model: "fleet_work_order"
+        save_as: "work_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['wo_type'].id"
+          date: 2024-03-01
+          vehicle_id: "EVAL: registry['vehicle'].id"
+          driver_id: "EVAL: registry['partner'].id"
+          estimated_date_depart: "2024-03-01 08:00:00"
+          estimated_date_arrive: "2024-03-01 17:00:00"
+          route_template_id: "EVAL: registry['route_template'].id"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['partner'].id"
+                end_location_id: "EVAL: registry['partner'].id"
+                distance: 10.0
+
+      - step: "Assert work order in draft"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Cancel work order from draft"
+        action: "call"
+        target: "work_order"
+        method: "action_cancel"
+        as_user: "base.user_admin"
+        context:
+          bypass_cancel_policy: true
+        asserts:
+          state:
+            type: "value"
+            expected: "cancel"
