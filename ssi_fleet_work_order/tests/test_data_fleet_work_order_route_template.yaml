@@ -1,0 +1,151 @@
+scenarios:
+  - name: "Fleet Work Order Route Template - Create"
+    steps:
+      - step: "Create route template category"
+        action: "create"
+        model: "fleet_work_order_route_template_category"
+        save_as: "category"
+        values:
+          name: "Route Category RT"
+          code: "RCAT001"
+
+      - step: "Create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "template"
+        values:
+          name: "Test Route Template"
+          code: "TRT001"
+          category_id: "EVAL: registry['category'].id"
+
+      - step: "Assert template created"
+        action: "assert"
+        target: "template"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Test Route Template"
+          code:
+            type: "value"
+            expected: "TRT001"
+          location_selection_method:
+            type: "value"
+            expected: "manual"
+
+  - name: "Fleet Work Order Route Template - Edit Name"
+    steps:
+      - step: "Create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "template"
+        values:
+          name: "Original Template"
+          code: "TRT002"
+
+      - step: "Update template name"
+        action: "write"
+        target: "template"
+        values:
+          name: "Updated Template"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "template"
+        asserts:
+          name:
+            type: "value"
+            expected: "Updated Template"
+
+  - name: "Fleet Work Order Route Template - Delete"
+    steps:
+      - step: "Create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "template"
+        values:
+          name: "Template To Delete"
+          code: "TRT003"
+
+      - step: "Delete template"
+        action: "call"
+        target: "template"
+        method: "unlink"
+
+      - step: "Verify template deleted"
+        action: "search"
+        model: "fleet_work_order_route_template"
+        domain: [["code", "=", "TRT003"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Fleet Work Order Route Template - With Routes"
+    steps:
+      - step: "Create start location partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_start"
+        values:
+          name: "Start Location RT Test"
+
+      - step: "Create end location partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_end"
+        values:
+          name: "End Location RT Test"
+
+      - step: "Create route template with routes"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "template"
+        values:
+          name: "Template With Routes"
+          code: "TRT004"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['loc_start'].id"
+                end_location_id: "EVAL: registry['loc_end'].id"
+                distance: 75.0
+
+      - step: "Assert template has routes"
+        action: "assert"
+        target: "template"
+        asserts:
+          route_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+
+  - name: "Fleet Work Order Route Template - Allowed Locations (manual)"
+    steps:
+      - step: "Create location partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "location"
+        values:
+          name: "Manual Location Test"
+
+      - step: "Create route template with manual location"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "template"
+        values:
+          name: "Template Manual Location"
+          code: "TRT005"
+          location_selection_method: "manual"
+          location_ids:
+            - "EVAL: registry['location'].id"
+
+      - step: "Assert allowed_location_ids computed"
+        action: "assert"
+        target: "template"
+        asserts:
+          allowed_location_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 1

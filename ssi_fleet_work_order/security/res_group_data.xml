@@ -110,7 +110,10 @@
             name="category_id"
             ref="fleet_work_order_analysis_data_ownership_module_category"
         />
-        <field name="implied_ids" eval="[(4, ref('fleet_work_order_analysis_company_group'))]" />
+        <field
+            name="implied_ids"
+            eval="[(4, ref('fleet_work_order_analysis_company_group'))]"
+        />
     </record>
 
     <record id="fleet_work_order_analysis_all_group" model="res.groups">
@@ -134,8 +137,8 @@
         <field name="name">Fleet Work Order Analysis</field>
         <field name="category_id" ref="fleet_work_order_reporting_module_category" />
         <field
-                name="users"
-                eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
-            />
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
     </record>
 </odoo>

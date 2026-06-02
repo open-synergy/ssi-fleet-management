@@ -1,0 +1,94 @@
+scenarios:
+  - name: "Fleet Vehicle - Create"
+    steps:
+      - step: "Create fleet vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Toyota Avanza Test"
+          code: "B 1234 ABC"
+
+      - step: "Assert vehicle created"
+        action: "assert"
+        target: "vehicle"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Toyota Avanza Test"
+          code:
+            type: "value"
+            expected: "B 1234 ABC"
+
+  - name: "Fleet Vehicle - Edit Name"
+    steps:
+      - step: "Create fleet vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Honda Jazz Test"
+          code: "B 5678 DEF"
+
+      - step: "Update vehicle name"
+        action: "write"
+        target: "vehicle"
+        values:
+          name: "Honda Jazz Updated"
+
+      - step: "Assert name updated"
+        action: "assert"
+        target: "vehicle"
+        asserts:
+          name:
+            type: "value"
+            expected: "Honda Jazz Updated"
+
+  - name: "Fleet Vehicle - Edit Code"
+    steps:
+      - step: "Create fleet vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Suzuki Ertiga Test"
+          code: "B 9012 GHI"
+
+      - step: "Update vehicle code"
+        action: "write"
+        target: "vehicle"
+        values:
+          code: "B 0000 NEW"
+
+      - step: "Assert code updated"
+        action: "assert"
+        target: "vehicle"
+        asserts:
+          code:
+            type: "value"
+            expected: "B 0000 NEW"
+
+  - name: "Fleet Vehicle - Delete"
+    steps:
+      - step: "Create fleet vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Delete Test Vehicle"
+          code: "B 0001 DEL"
+
+      - step: "Delete vehicle"
+        action: "call"
+        target: "vehicle"
+        method: "unlink"
+
+      - step: "Verify vehicle deleted"
+        action: "search"
+        model: "fleet_vehicle"
+        domain: [["code", "=", "B 0001 DEL"]]
+        save_as: "result"
+        expect_count: 0

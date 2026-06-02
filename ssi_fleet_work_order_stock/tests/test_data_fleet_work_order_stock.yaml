@@ -1,0 +1,201 @@
+scenarios:
+  - name: "Fleet Work Order Type Stock - Allowed Picking Types (manual)"
+    steps:
+      - step: "Create fleet work order type with stock"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Stock WO Type"
+          code: "STWOTYPE001"
+          picking_type_selection_method: "manual"
+
+      - step: "Assert picking type selection method"
+        action: "assert"
+        target: "wo_type"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          picking_type_selection_method:
+            type: "value"
+            expected: "manual"
+          allowed_picking_type_ids:
+            type: "m2m"
+            check: "count"
+            expected_count: 0
+
+  - name: "Fleet Work Order Manifest - Create and Assert"
+    steps:
+      - step: "Setup - create start location"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_start"
+        values:
+          name: "Manifest Start Location"
+
+      - step: "Setup - create end location"
+        action: "create"
+        model: "res.partner"
+        save_as: "loc_end"
+        values:
+          name: "Manifest End Location"
+
+      - step: "Setup - create driver"
+        action: "create"
+        model: "res.partner"
+        save_as: "driver"
+        values:
+          name: "Manifest Driver"
+
+      - step: "Setup - create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "route_template"
+        values:
+          name: "Manifest Route Template"
+          code: "MANRT001"
+
+      - step: "Setup - create vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Manifest Test Vehicle"
+          code: "B 5555 MAN"
+
+      - step: "Setup - create work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Manifest WO Type"
+          code: "MANTYPE001"
+
+      - step: "Create fleet work order"
+        action: "create"
+        model: "fleet_work_order"
+        save_as: "work_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['wo_type'].id"
+          date: 2024-04-01
+          vehicle_id: "EVAL: registry['vehicle'].id"
+          driver_id: "EVAL: registry['driver'].id"
+          estimated_date_depart: "2024-04-01 08:00:00"
+          estimated_date_arrive: "2024-04-01 17:00:00"
+          route_template_id: "EVAL: registry['route_template'].id"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['loc_start'].id"
+                end_location_id: "EVAL: registry['loc_end'].id"
+                distance: 20.0
+
+      - step: "Get UoM unit ref"
+        action: "ref"
+        xml_id: "uom.product_uom_unit"
+        save_as: "uom"
+
+      - step: "Create test product"
+        action: "create"
+        model: "product.product"
+        save_as: "product"
+        values:
+          name: "Test Manifest Product"
+          type: "product"
+          uom_id: "EVAL: registry['uom'].id"
+
+      - step: "Create fleet work order manifest"
+        action: "create"
+        model: "fleet_work_order_manifest"
+        save_as: "manifest"
+        values:
+          work_order_id: "EVAL: registry['work_order'].id"
+          product_id: "EVAL: registry['product'].id"
+          uom_quantity: 10.0
+          uom_id: "EVAL: registry['uom'].id"
+
+      - step: "Assert manifest created"
+        action: "assert"
+        target: "manifest"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          uom_quantity:
+            type: "value"
+            expected: 10.0
+
+      - step: "Assert work order has manifest"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          manifest_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 1
+
+  - name: "Fleet Work Order Stock - Picking IDs Compute"
+    steps:
+      - step: "Setup - create partner"
+        action: "create"
+        model: "res.partner"
+        save_as: "partner"
+        values:
+          name: "Stock Test Partner"
+
+      - step: "Setup - create route template"
+        action: "create"
+        model: "fleet_work_order_route_template"
+        save_as: "route_template"
+        values:
+          name: "Stock Route Template"
+          code: "STRT001"
+
+      - step: "Setup - create vehicle"
+        action: "create"
+        model: "fleet_vehicle"
+        save_as: "vehicle"
+        values:
+          name: "Stock Test Vehicle"
+          code: "B 4444 STK"
+
+      - step: "Setup - create work order type"
+        action: "create"
+        model: "fleet_work_order_type"
+        save_as: "wo_type"
+        values:
+          name: "Stock Type Test"
+          code: "STTYPE001"
+
+      - step: "Create fleet work order"
+        action: "create"
+        model: "fleet_work_order"
+        save_as: "work_order"
+        as_user: "base.user_admin"
+        values:
+          type_id: "EVAL: registry['wo_type'].id"
+          date: 2024-05-01
+          vehicle_id: "EVAL: registry['vehicle'].id"
+          driver_id: "EVAL: registry['partner'].id"
+          estimated_date_depart: "2024-05-01 08:00:00"
+          estimated_date_arrive: "2024-05-01 17:00:00"
+          route_template_id: "EVAL: registry['route_template'].id"
+          route_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                start_location_id: "EVAL: registry['partner'].id"
+                end_location_id: "EVAL: registry['partner'].id"
+                distance: 15.0
+
+      - step: "Assert work order has no pickings initially"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          picking_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 0
