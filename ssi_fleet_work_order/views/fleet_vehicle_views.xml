@@ -27,7 +27,12 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="driver_ids" />
+                    <field name="codriver_ids" />
+                </xpath>
+            </data>
         </field>
     </record>
 

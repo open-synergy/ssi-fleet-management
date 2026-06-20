@@ -27,7 +27,23 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
         />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <data />
+            <data>
+                <xpath expr="//group[@name='dom_active']" position="after">
+                    <separator />
+                    <group expand="0" string="Group By">
+                        <filter
+                            name="grp_vehicle_selection_method"
+                            string="Vehicle Selection Method"
+                            context="{'group_by':'vehicle_selection_method'}"
+                        />
+                        <filter
+                            name="grp_route_template_selection_method"
+                            string="Route Template Selection Method"
+                            context="{'group_by':'route_template_selection_method'}"
+                        />
+                    </group>
+                </xpath>
+            </data>
         </field>
     </record>
 
