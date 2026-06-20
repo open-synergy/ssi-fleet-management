@@ -589,6 +589,7 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
 
 #. module: ssi_fleet_work_order
+#: model_terms:ir.ui.view,arch_db:ssi_fleet_work_order.fleet_work_order_type_view_search
 #: model_terms:ir.ui.view,arch_db:ssi_fleet_work_order.view_fleet_work_order_analysis_search
 msgid "Group By"
 msgstr ""
@@ -1021,6 +1022,7 @@ msgstr ""
 
 #. module: ssi_fleet_work_order
 #: model:ir.model.fields,field_description:ssi_fleet_work_order.field_fleet_work_order_type__route_template_selection_method
+#: model_terms:ir.ui.view,arch_db:ssi_fleet_work_order.fleet_work_order_type_view_search
 msgid "Route Template Selection Method"
 msgstr ""
 
@@ -1187,6 +1189,7 @@ msgstr ""
 
 #. module: ssi_fleet_work_order
 #: model:ir.model.fields,field_description:ssi_fleet_work_order.field_fleet_work_order_type__vehicle_selection_method
+#: model_terms:ir.ui.view,arch_db:ssi_fleet_work_order.fleet_work_order_type_view_search
 msgid "Vehicle Selection Method"
 msgstr ""
 
