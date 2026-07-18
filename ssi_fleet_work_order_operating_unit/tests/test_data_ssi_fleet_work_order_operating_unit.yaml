@@ -1,0 +1,100 @@
+setup:
+  steps:
+    - step: "Create driver partner"
+      action: "create"
+      model: "res.partner"
+      save_as: "driver"
+      values:
+        name: "Fleet Work Order OU Test Driver"
+
+    - step: "Create fleet vehicle"
+      action: "create"
+      model: "fleet_vehicle"
+      save_as: "vehicle"
+      values:
+        name: "Fleet Work Order OU Test Vehicle"
+        code: "EVAL: 'FWOOUV' + datetime.now().strftime('%H%M%S%f')"
+
+    - step: "Create fleet work order type"
+      action: "create"
+      model: "fleet_work_order_type"
+      save_as: "wo_type"
+      values:
+        name: "Fleet Work Order OU Test Type"
+        code: "EVAL: 'FWOOUT' + datetime.now().strftime('%H%M%S%f')"
+
+    - step: "Create fleet work order route template"
+      action: "create"
+      model: "fleet_work_order_route_template"
+      save_as: "route_template"
+      values:
+        name: "Fleet Work Order OU Test Route Template"
+        code: "EVAL: 'FWOOUR' + datetime.now().strftime('%H%M%S%f')"
+
+    - step: "Create fleet work order with operating_unit_id"
+      action: "create"
+      model: "fleet_work_order"
+      save_as: "work_order"
+      as_user: "base.user_admin"
+      values:
+        type_id: "REC: wo_type.id"
+        date: 2024-01-15
+        vehicle_id: "REC: vehicle.id"
+        driver_id: "REC: driver.id"
+        estimated_date_depart: "2024-01-15 08:00:00"
+        estimated_date_arrive: "2024-01-15 17:00:00"
+        route_template_id: "REC: route_template.id"
+        operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+scenarios:
+  - name: "Fleet Work Order - Operating Unit is set"
+    steps:
+      - step: "Assert work order operating_unit_id is set"
+        action: "assert"
+        target: "work_order"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Fleet Work Order - ir.rule denies access outside assigned operating unit"
+    steps:
+      - step: "Create user restricted to a different operating unit"
+        action: "create"
+        model: "res.users"
+        save_as: "restricted_user"
+        values:
+          name: "Fleet Work Order OU Restricted User"
+          login: "ou_restricted_fleet_work_order@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF: ssi_fleet_work_order.fleet_work_order_user_group",
+                  "REF: ssi_fleet_work_order_operating_unit.fleet_work_order_ou_group",
+                ],
+              ],
+            ]
+          assigned_operating_unit_ids: [[6, 0, []]]
+
+      - step: "Restricted user cannot read the record outside their operating unit"
+        action: "call"
+        target: "work_order"
+        method: "read"
+        as_user: "restricted_user"
+        args:
+          - ["operating_unit_id"]
+        expect_error:
+          type: "AccessError"
+
+      - step: "Restricted user cannot write the record outside their operating unit"
+        action: "write"
+        target: "work_order"
+        as_user: "restricted_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          real_date_depart: "2024-01-15 08:30:00"
