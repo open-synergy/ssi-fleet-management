@@ -20,6 +20,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_fleet_management](ssi_fleet_management/) | 14.0.2.2.0 |  | Fleet Management
 [ssi_fleet_work_order](ssi_fleet_work_order/) | 14.0.3.2.0 |  | Fleet Work Order
+[ssi_fleet_work_order_operating_unit](ssi_fleet_work_order_operating_unit/) | 14.0.1.0.0 |  | Fleet Work Order + Operating Unit
 [ssi_fleet_work_order_stock](ssi_fleet_work_order_stock/) | 14.0.2.6.0 |  | Fleet Work Order - Stock Integration
 
 [//]: # (end addons)
